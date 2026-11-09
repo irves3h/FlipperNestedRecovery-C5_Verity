@@ -140,7 +140,8 @@ options:
 
 ## 致谢
 
-感谢 AloneLiberty 开发了最初的 FlipperNestedRecovery 工具，本项目正是基于此工具开发的。（https://github.com/AloneLiberty/FlipperNestedRecovery）
+感谢 AloneLiberty 开发了最初的 FlipperNestedRecovery 工具，本项目正是基于此工具开发的。
+（ https://github.com/AloneLiberty/FlipperNestedRecovery ）
 
 ## 已定事项
 
