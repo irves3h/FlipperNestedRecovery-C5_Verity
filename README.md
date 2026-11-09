@@ -85,7 +85,7 @@ C5 的改进（搜索空间与候选集合不变，密钥结果不变）：
 
 ## 安装
 
-从源码安装（本库是私人仓库，未发布到 PyPI）：
+从源码安装（本库未发布到 PyPI）：
 
 ```sh
 git clone https://github.com/irves3h/FlipperNestedRecovery-C5_Verity.git
