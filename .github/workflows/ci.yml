@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.os }} · Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install build and test dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install "protobuf>4" pyserial pytest
+
+      - name: Configure Ubuntu liblzma
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes liblzma-dev
+
+      - name: Configure macOS liblzma
+        if: runner.os == 'macOS'
+        run: |
+          brew install xz
+          echo "CPPFLAGS=-I$(brew --prefix xz)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"
+          echo "LDFLAGS=-L$(brew --prefix xz)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
+
+      - name: Build native extensions
+        run: python setup.py build_ext --inplace
+
+      - name: Run tests
+        run: PYTHONPATH=. python -m pytest -q tests
